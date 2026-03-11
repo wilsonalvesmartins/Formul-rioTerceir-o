@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Configurações do Express
 app.use(express.json());
@@ -104,5 +104,5 @@ app.delete('/api/formaturas/:id', requireAdmin, (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Servidor rodando perfeitamente na porta ${PORT}`);
+    console.log(`Servidor a correr perfeitamente na porta ${PORT}`);
 });
