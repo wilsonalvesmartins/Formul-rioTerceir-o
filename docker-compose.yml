@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: ww-producoes-app
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mapeia a pasta ./data da VPS para dentro do container
+      # Isso garante que o banco de dados SQLite não seja apagado ao atualizar o app
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
