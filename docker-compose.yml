@@ -6,11 +6,11 @@ services:
     container_name: ww-producoes-app
     restart: always
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
-      # Mapeia a pasta ./data da VPS para dentro do container
-      # Isso garante que o banco de dados SQLite não seja apagado ao atualizar o app
+      # Mapeia a pasta ./data da VPS para dentro do contentor
+      # Garante que a base de dados SQLite não é apagada ao atualizar a app
       - ./data:/app/data
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3001
