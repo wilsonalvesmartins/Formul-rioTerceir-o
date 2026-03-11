@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WW Produções - Formatura</title>
+    <!-- Usando Tailwind CSS para um design moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .bg-gold { background-color: #d4af37; }
+        .text-gold { color: #d4af37; }
+        .border-gold { border-color: #d4af37; }
+        .hover-bg-gold:hover { background-color: #b8962e; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="py-6 shadow-md bg-slate-900 border-b border-gray-800 text-center">
+        <h1 class="text-3xl font-bold text-gold tracking-widest uppercase">WW Produções</h1>
+        <p class="text-sm text-gray-400 mt-1">Cadastro de Formandos</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <!-- VISÃO 1: FORMULÁRIO DO ALUNO -->
+        <div id="studentView" class="w-full max-w-2xl bg-slate-800 p-8 rounded-xl shadow-2xl border border-gray-700">
+            <h2 class="text-xl font-semibold mb-6 border-b border-gray-700 pb-2">Suas Informações</h2>
+            
+            <form id="formaturaForm" class="space-y-4" onsubmit="submitForm(event)">
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Nome Completo</label>
+                    <input type="text" id="nomeCompleto" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none">
+                </div>
+                
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Endereço Completo</label>
+                    <input type="text" id="endereco" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-1">Data de Nascimento</label>
+                        <input type="date" id="dataNascimento" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none" style="color-scheme: dark;">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-1">Qtd. de Acompanhantes</label>
+                        <input type="number" id="qtdAcompanhantes" min="0" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-300 mb-1">Nome dos Pais ou Responsáveis</label>
+                    <input type="text" id="nomePais" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-1">Quantidade de Parcelas</label>
+                        <select id="qtdParcelas" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="1">1x (À vista)</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                            <option value="5">5x</option>
+                            <option value="6">6x</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300 mb-1">Forma de Pagamento</label>
+                        <select id="formaPagamento" required class="w-full bg-slate-900 border border-gray-600 rounded p-2 text-white focus:border-gold focus:outline-none">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Pix">Pix</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Boleto">Boleto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-gold hover-bg-gold text-slate-900 font-bold py-3 rounded transition duration-300">
+                        Enviar Informações
+                    </button>
+                </div>
+                <p id="formFeedback" class="text-center mt-2 font-semibold hidden"></p>
+            </form>
+        </div>
+
+        <!-- VISÃO 2: PAINEL ADMINISTRATIVO (Oculto por padrão) -->
+        <div id="adminView" class="w-full max-w-6xl hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gold">Painel Administrativo</h2>
+                <button onclick="logoutAdmin()" class="text-sm bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white">Sair</button>
+            </div>
+            
+            <div class="bg-slate-800 rounded-xl shadow-2xl overflow-x-auto border border-gray-700">
+                <table class="w-full text-left text-sm text-gray-300">
+                    <thead class="bg-slate-900 text-gold uppercase text-xs">
+                        <tr>
+                            <th class="px-4 py-3">ID</th>
+                            <th class="px-4 py-3">Nome</th>
+                            <th class="px-4 py-3">Endereço</th>
+                            <th class="px-4 py-3">Nascimento</th>
+                            <th class="px-4 py-3">Pais</th>
+                            <th class="px-4 py-3">Acomp.</th>
+                            <th class="px-4 py-3">Parc.</th>
+                            <th class="px-4 py-3">Pagamento</th>
+                            <th class="px-4 py-3 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y divide-gray-700">
+                        <!-- Linhas geradas via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal de Edição (Admin) -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 p-6 rounded-xl w-full max-w-2xl border border-gray-600">
+            <h3 class="text-lg font-bold text-gold mb-4">Editar Registro</h3>
+            <form id="editForm" class="space-y-4">
+                <input type="hidden" id="editId">
+                <div>
+                    <label class="block text-sm text-gray-300">Nome</label>
+                    <input type="text" id="editNome" class="w-full bg-slate-900 border border-gray-600 p-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-300">Endereço</label>
+                    <input type="text" id="editEndereco" class="w-full bg-slate-900 border border-gray-600 p-2 rounded">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-300">Nascimento</label>
+                        <input type="date" id="editDataNascimento" class="w-full bg-slate-900 border border-gray-600 p-2 rounded" style="color-scheme: dark;">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300">Acompanhantes</label>
+                        <input type="number" id="editAcompanhantes" class="w-full bg-slate-900 border border-gray-600 p-2 rounded">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-300">Pais</label>
+                    <input type="text" id="editPais" class="w-full bg-slate-900 border border-gray-600 p-2 rounded">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-300">Parcelas</label>
+                        <select id="editParcelas" class="w-full bg-slate-900 border border-gray-600 p-2 rounded">
+                            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-300">Pagamento</label>
+                        <select id="editPagamento" class="w-full bg-slate-900 border border-gray-600 p-2 rounded">
+                            <option value="Pix">Pix</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Boleto">Boleto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700 mt-4">
+                    <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded">Cancelar</button>
+                    <button type="button" onclick="saveEdit()" class="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer com cadeado escondido -->
+    <footer class="py-4 text-center text-xs text-gray-600 relative">
+        <p>&copy; 2026 WW Produções. Todos os direitos reservados.</p>
+        <!-- Cadeado escondido para o painel admin -->
+        <span onclick="promptAdmin()" class="absolute bottom-4 right-4 text-[10px] opacity-20 hover:opacity-100 cursor-pointer transition-opacity" title="Acesso Restrito">🔒</span>
+    </footer>
+
+    <script>
+        // ======= LÓGICA DO ALUNO (ENVIO DE FORMULÁRIO) =======
+        async function submitForm(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const feedback = document.getElementById('formFeedback');
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
+
+            const payload = {
+                nomeCompleto: document.getElementById('nomeCompleto').value,
+                endereco: document.getElementById('endereco').value,
+                dataNascimento: document.getElementById('dataNascimento').value,
+                nomePais: document.getElementById('nomePais').value,
+                qtdAcompanhantes: document.getElementById('qtdAcompanhantes').value,
+                qtdParcelas: document.getElementById('qtdParcelas').value,
+                formaPagamento: document.getElementById('formaPagamento').value
+            };
+
+            try {
+                const res = await fetch('/api/formaturas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    feedback.innerText = "Informações enviadas com sucesso! Obrigado.";
+                    feedback.className = "text-center mt-3 font-semibold text-green-400 block";
+                    document.getElementById('formaturaForm').reset();
+                } else {
+                    const err = await res.json();
+                    feedback.innerText = "Erro: " + err.error;
+                    feedback.className = "text-center mt-3 font-semibold text-red-400 block";
+                }
+            } catch (error) {
+                feedback.innerText = "Erro ao conectar com o servidor.";
+                feedback.className = "text-center mt-3 font-semibold text-red-400 block";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Enviar Informações";
+                setTimeout(() => feedback.classList.add('hidden'), 5000);
+            }
+        }
+
+        // ======= LÓGICA DE ADMINISTRAÇÃO =======
+        let adminPass = '';
+        let registros = [];
+
+        async function promptAdmin() {
+            const pass = prompt("Informe a senha de administração:");
+            if (pass) {
+                adminPass = pass;
+                await loadAdminData();
+            }
+        }
+
+        function logoutAdmin() {
+            adminPass = '';
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('studentView').classList.remove('hidden');
+        }
+
+        async function loadAdminData() {
+            try {
+                const res = await fetch('/api/formaturas', {
+                    headers: { 'x-admin-password': adminPass }
+                });
+
+                if (res.ok) {
+                    registros = await res.json();
+                    document.getElementById('studentView').classList.add('hidden');
+                    document.getElementById('adminView').classList.remove('hidden');
+                    renderTable();
+                } else {
+                    alert("Senha incorreta ou acesso negado!");
+                }
+            } catch (err) {
+                alert("Erro ao acessar o servidor.");
+            }
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('adminTableBody');
+            tbody.innerHTML = '';
+            
+            if(registros.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-4 text-gray-500">Nenhum registro encontrado.</td></tr>`;
+                return;
+            }
+
+            registros.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-700 transition-colors";
+                tr.innerHTML = `
+                    <td class="px-4 py-3">${r.id}</td>
+                    <td class="px-4 py-3 font-medium text-white">${r.nomeCompleto}</td>
+                    <td class="px-4 py-3">${r.endereco}</td>
+                    <td class="px-4 py-3">${r.dataNascimento.split('-').reverse().join('/')}</td>
+                    <td class="px-4 py-3">${r.nomePais}</td>
+                    <td class="px-4 py-3">${r.qtdAcompanhantes}</td>
+                    <td class="px-4 py-3">${r.qtdParcelas}x</td>
+                    <td class="px-4 py-3">${r.formaPagamento}</td>
+                    <td class="px-4 py-3 text-center space-x-2">
+                        <button onclick="openEdit(${r.id})" class="text-blue-400 hover:text-blue-300">Editar</button>
+                        <button onclick="deleteEntry(${r.id})" class="text-red-400 hover:text-red-300">Apagar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // --- Apagar ---
+        async function deleteEntry(id) {
+            if(!confirm(`Tem certeza que deseja apagar o registro #${id}?`)) return;
+
+            try {
+                const res = await fetch(`/api/formaturas/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'x-admin-password': adminPass }
+                });
+                if(res.ok) {
+                    await loadAdminData();
+                } else {
+                    alert("Erro ao apagar.");
+                }
+            } catch(e) {
+                alert("Erro de conexão.");
+            }
+        }
+
+        // --- Editar ---
+        function openEdit(id) {
+            const reg = registros.find(r => r.id === id);
+            if(!reg) return;
+
+            document.getElementById('editId').value = reg.id;
+            document.getElementById('editNome').value = reg.nomeCompleto;
+            document.getElementById('editEndereco').value = reg.endereco;
+            document.getElementById('editDataNascimento').value = reg.dataNascimento;
+            document.getElementById('editAcompanhantes').value = reg.qtdAcompanhantes;
+            document.getElementById('editPais').value = reg.nomePais;
+            document.getElementById('editParcelas').value = reg.qtdParcelas;
+            document.getElementById('editPagamento').value = reg.formaPagamento;
+
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        async function saveEdit() {
+            const id = document.getElementById('editId').value;
+            const payload = {
+                nomeCompleto: document.getElementById('editNome').value,
+                endereco: document.getElementById('editEndereco').value,
+                dataNascimento: document.getElementById('editDataNascimento').value,
+                nomePais: document.getElementById('editPais').value,
+                qtdAcompanhantes: document.getElementById('editAcompanhantes').value,
+                qtdParcelas: document.getElementById('editParcelas').value,
+                formaPagamento: document.getElementById('editPagamento').value
+            };
+
+            try {
+                const res = await fetch(`/api/formaturas/${id}`, {
+                    method: 'PUT',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'x-admin-password': adminPass
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if(res.ok) {
+                    closeEditModal();
+                    await loadAdminData();
+                } else {
+                    alert("Erro ao atualizar registro.");
+                }
+            } catch(e) {
+                alert("Erro de conexão.");
+            }
+        }
+    </script>
+</body>
+</html>
